@@ -1,16 +1,16 @@
-Back-end for dates app. Hosts the following end-points:
+Back-end for dates app. Exposes the following end-points:
 
-//READ ALL DATES LOGGED
+Read all dates logged
 GET: api/DateDetails
 
-//READ AN ENTRY BY ID
+Read an entry by ID
 GET: api/DateDetails/id
 
-//UPDATE WITH ID
-PUT: api/DateDetails/5
+Update with ID
+PUT: api/DateDetails/id
 
-//CREATE
+Create an entry
 POST: api/DateDetails
 
-//DELETE
+Delete an entry
 DELETE: api/DateDetails/id
