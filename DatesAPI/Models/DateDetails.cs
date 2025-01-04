@@ -7,6 +7,7 @@ namespace DatesAPI.Models
     {
         [Key]
         public int DateId { get; set; }
+        public int UserId { get; set; }
 
         [Column(TypeName ="nvarchar(200)")]
         public string Event { get; set; } = "";

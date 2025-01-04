@@ -17,6 +17,7 @@ namespace DatesAPI.Migrations
                 {
                     DateId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Event = table.Column<string>(type: "nvarchar(200)", nullable: false),
                     EventDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     EventNote = table.Column<string>(type: "nvarchar(200)", nullable: false),
@@ -25,6 +26,21 @@ namespace DatesAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DateDetails", x => x.DateId);
+                });
+            
+            migrationBuilder.CreateTable(
+                name: "UserDetails",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(256)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDetails", x => x.UserId);
                 });
         }
 

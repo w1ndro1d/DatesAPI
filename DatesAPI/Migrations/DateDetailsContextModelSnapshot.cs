@@ -4,6 +4,7 @@ using DatesAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -30,6 +31,8 @@ namespace DatesAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DateId"));
 
+                    b.Property<int>("UserId").HasColumnType("int");
+
                     b.Property<string>("Event")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)");
@@ -48,6 +51,30 @@ namespace DatesAPI.Migrations
 
                     b.ToTable("DateDetails");
                 });
+
+            modelBuilder.Entity("DatesAPI.Models.UserDetails", b =>
+            {
+                b.Property<int>("UserId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(256)");
+
+                b.Property<string>("PasswordHash")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime");
+
+                b.HasKey("UserId");
+
+                b.ToTable("UserDetails");
+            });
 #pragma warning restore 612, 618
         }
     }
