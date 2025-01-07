@@ -10,6 +10,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Set CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -52,10 +63,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(options => 
-options.WithOrigins("http://localhost:4200")
-.AllowAnyMethod()
-.AllowAnyHeader());
+app.UseCors("AllowAll");
+
+//app.UseCors(options => 
+//options.WithOrigins("http://localhost:4200")
+//.AllowAnyMethod()
+//.AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
