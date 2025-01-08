@@ -45,6 +45,10 @@ namespace DatesAPI.Controllers
                 await _userService.RegisterAsync(model);
                 return Ok("User registered successfully!");
             }
+            catch (Exception ex) when (ex.Message == "User already exists!")
+            {
+                return Conflict(new {message = ex.Message});
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
