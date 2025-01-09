@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DatesAPI.Models
 {
@@ -12,6 +13,7 @@ namespace DatesAPI.Models
         public string Email { get; set; } = "";
 
         [Column(TypeName = "nvarchar(max)")]
+        [JsonPropertyName("password")]
         public string PasswordHash { get; set; } = "";
 
         [Column(TypeName = "datetime")]

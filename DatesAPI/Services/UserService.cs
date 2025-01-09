@@ -27,7 +27,7 @@ namespace DatesAPI.Services
             var user = await _userRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
-                throw new Exception("Invalid credentials!");
+                throw new Exception($"No account found for {email}! Please sign up first.");
             }
 
             if (!_passwordHasher.VerifyHashedPassword(password, user.PasswordHash))

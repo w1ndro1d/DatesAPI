@@ -31,9 +31,17 @@ namespace DatesAPI.Controllers
                 var token = await _userService.LoginAsync(model.Email, model.PasswordHash);
                 return Ok(new { Token = token });
             }
-            catch (UnauthorizedAccessException)
+            catch (Exception ex) when (ex.Message == $"No account found for {model.Email}! Please sign up first.")
             {
-                return Unauthorized("Invalid credentials!");
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex) when (ex.Message == "Invalid credentials!")
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
