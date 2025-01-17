@@ -14,42 +14,55 @@ namespace DatesAPI.Controllers
     public class DateDetailsController : ControllerBase
     {
         private readonly DateDetailsContext _context;
+        private readonly UserDetailsContext _userDetailsContext;
 
-        public DateDetailsController(DateDetailsContext context)
+        public DateDetailsController(DateDetailsContext context, UserDetailsContext userDetailsContext)
         {
             _context = context;
+            _userDetailsContext = userDetailsContext;
         }
-
+        
         //READ
         // GET: api/DateDetails
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DateDetails>>> GetDateDetails()
+        [HttpGet("{userEmail}")]
+        public async Task<ActionResult<IEnumerable<DateDetails>>> GetDateDetailsForUser(string userEmail)
         {
-          if (_context.DateDetails == null)
-          {
-              return NotFound();
-          }
-            return await _context.DateDetails.ToListAsync();
-        }
-
-        //READ WITH ID
-        // GET: api/DateDetails/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DateDetails>> GetDateDetails(int id)
-        {
-          if (_context.DateDetails == null)
-          {
-              return NotFound();
-          }
-            var dateDetails = await _context.DateDetails.FindAsync(id);
-
-            if (dateDetails == null)
+            //get userID from user email
+            int userID = await _userDetailsContext.UserDetails.Where(d => d.Email == userEmail).Select(d => d.UserID).FirstOrDefaultAsync();
+            //for user.email in error message
+            var user = await _userDetailsContext.UserDetails.FirstOrDefaultAsync(u => u.UserID == userID);
+            if(user == null)
             {
-                return NotFound();
+                return NotFound("User not found!");
             }
-
-            return dateDetails;
+            
+            //fetch dates that match the userID
+            var userDateDetails = await _context.DateDetails.Where(d => d.UserId == userID).ToListAsync();
+            if(userDateDetails == null || userDateDetails.Count ==0)
+            {
+                return NotFound($"No dates found for {user.Email}!");
+            }
+            return Ok(userDateDetails);
         }
+
+        ////READ WITH ID
+        //// GET: api/DateDetails/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<DateDetails>> GetDateDetails(int id)
+        //{
+        //  if (_context.DateDetails == null)
+        //  {
+        //      return NotFound();
+        //  }
+        //    var dateDetails = await _context.DateDetails.FindAsync(id);
+
+        //    if (dateDetails == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return dateDetails;
+        //}
 
         //UPDATE WITH ID
         // PUT: api/DateDetails/5
